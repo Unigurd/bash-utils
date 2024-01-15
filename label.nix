@@ -1,6 +1,10 @@
 pkgs:
 let
   mkDerivation = pkgs.stdenv.mkDerivation;
+  # To be piped into a file $out/bin/install-label.sh.
+  # Adds coreutils to PATH if somehow not present
+  # to ensure the script works.
+  # OUT is substituted with whatever $out is.
   wrapper = ''
     exists() {
       type "$1" >/dev/null 2>/dev/null
