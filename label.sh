@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function -label-dir() {
-  local dir="${LABELS_DIR:-$HOME/.labels}"
+  local dir="${LABEL_DIR:-$HOME/.labels}"
 	mkdir -p "$dir"
 	echo "$dir"
 }
