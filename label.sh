@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-function labels-dir() {
-	mkdir -p "$HOME/gurd/.labels"
-	echo "$HOME/gurd/.labels/"
+function -label-dir() {
+  local dir="${LABELS_DIR:-$HOME/.labels}"
+	mkdir -p "$dir"
+	echo "$dir"
 }
 
 function label() {
@@ -12,7 +13,7 @@ function label() {
 	  return 1
 	fi
 
-	echo $(pwd) > "$(labels-dir)/$1"
+	echo $(pwd) > "$(-label-dir)/$1"
 }
 
 
@@ -23,9 +24,13 @@ function label-dest() {
     return 1
   fi
 
-  cat "$(labels-dir)/$1"
+  cat "$(-label-dir)/$1"
 }
 
+
+function label-list() {
+  ls "$(-label-dir)"
+  }
 
 function go() {
 	if [[ -z $1 ]] || [[ -n $2 ]]
