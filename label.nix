@@ -22,11 +22,15 @@ in
 mkDerivation {
   name = "label";
   src  = ./label.sh;
+  completion = ./label-completion.sh;
   dontUnpack = true;
   installPhase = ''
     mkdir -p $out/bin
     cp $src $out/label.sh
     echo '${wrapper}' > $out/bin/install-label.sh
     sed -i "s|OUT|$out|g" "$out"/bin/install-label.sh
+
+    mkdir -p "$out"/share/bash-completion/completions
+    cp "$completion" "$out"/share/bash-completion/completions
 '';
 }
