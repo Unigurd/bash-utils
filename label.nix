@@ -29,7 +29,7 @@ mkDerivation {
     cp $src $out/label.sh
     echo '${wrapper}' > $out/bin/install-label.sh
     sed -i "s|OUT|$out|g" "$out"/bin/install-label.sh
-    chmod 777 "$out"/bin/install-label.sh
+    chmod 555 "$out"/bin/install-label.sh
 
     mkdir -p "$out"/share/bash-completion/completions
     cp "$completion" "$out"/share/bash-completion/completions
