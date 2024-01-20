@@ -6,9 +6,9 @@
     let pkgs = nixpkgs.legacyPackages.x86_64-linux;
     in {
       packages.x86_64-linux = {
-        label   = import ./label.nix pkgs;
-        note    = import ./note.nix pkgs;
-        default = import ./label.nix pkgs; # Should provide all packages I guess
+        note = import ./note.nix pkgs;
+        label = import ./label/label.nix pkgs;
+        default = import ./label/label.nix pkgs; # Should provide all packages I guess
       };
     };
 }
