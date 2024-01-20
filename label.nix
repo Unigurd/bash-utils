@@ -1,23 +1,6 @@
 pkgs:
 let
   mkDerivation = pkgs.stdenv.mkDerivation;
-  # To be piped into a file $out/bin/install-label.sh.
-  # Adds coreutils to PATH if somehow not present
-  # to ensure the script works.
-  # OUT is substituted with whatever $out is.
-  # wrapper = ''
-  #   exists() {
-  #     type "$1" >/dev/null 2>/dev/null
-  #   }
-
-  #   if exists mkdir && exists cat && exists echo
-  #   then true
-  #   else PATH="${pkgs.coreutils}/bin:$PATH"
-  #   fi
-
-  #   source OUT/label.sh
-  # '';
-
 in
 mkDerivation {
   name = "label";
@@ -28,7 +11,7 @@ mkDerivation {
     mkdir -p "$out/bin"
     cp $src "$out/bin/gurd-label.sh"
 
-    mkdir -p "$out"/share/bash-completion/completions
-    cp "$completion" "$out"/share/bash-completion/completions
+    mkdir -p "$out"/etc/bash_completion.d
+    cp "$completion" "$out"/etc/bash_completion.d/
 '';
 }
