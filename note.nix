@@ -1,18 +1,18 @@
 pkgs:
 pkgs.stdenv.mkDerivation {
   name = "note";
-  src = ./notes;
+  src = ./note;
   buildInputs = [ pkgs.makeWrapper ];
   dontUnpack = true;
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/lib
-    cp $src/note.sh $out/lib/note.sh
-    cp $src/notes-dir.sh $out/lib/notes-dir.sh
-    sed -i "s|notes-dir.sh|$out/lib/notes-dir.sh|g" $out/lib/note.sh
-    chmod 733 $out/lib/note.sh
-    chmod 733 $out/lib/notes-dir.sh
-    makeWrapper $out/lib/note.sh $out/bin/note --prefix PATH : ${pkgs.coreutils}
-    makeWrapper $out/lib/notes-dir.sh $out/bin/notes-dir --prefix PATH : ${pkgs.coreutils}
+    cp $src/note $out/lib/note
+    cp $src/note-dir $out/lib/note-dir
+    # sed -i "s|note-dir|$out/lib/note-dir|g" $out/lib/note
+    chmod 555 $out/lib/note
+    chmod 555 $out/lib/note-dir
+    makeWrapper $out/lib/note $out/bin/note --prefix PATH : ${pkgs.coreutils}
+    makeWrapper $out/lib/note-dir $out/bin/note-dir --prefix PATH : ${pkgs.coreutils}
   '';
 }

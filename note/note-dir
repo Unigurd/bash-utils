@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ "$#" -ne 0 ]]
+then
+  echo No arguments!
+  return 1
+fi
+
+if [[ -n "$NOTE_DIR" ]]
+  then
+  mkdir -p "$NOTE_DIR"
+  echo "$NOTE_DIR"
+else
+  mkdir -p ~/.note
+  echo ~/.note
+fi
