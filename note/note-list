@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ "$#" -ne 0 ]]
+then
+  echo Exactly 0 arguments required >&2
+  exit 1
+fi
+
+ls -A "$(note-dir)"
