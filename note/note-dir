@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ "$#" -ne 0 ]]
 then
-  echo No arguments!
-  return 1
+  echo No arguments! >&2
+  exit 1
 fi
 
 if [[ -n "$NOTE_DIR" ]]
