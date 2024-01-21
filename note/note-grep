@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # if note-dir not empty:
-if [[ -z "$(ls -A)" ]]
+if [[ -n "$(ls -A "$(note-dir)")" ]]
 then
   grep "$@" "$(note-dir)"/*
 fi
