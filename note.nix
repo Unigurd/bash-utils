@@ -12,6 +12,6 @@ pkgs.stdenv.mkDerivation {
     cp $src/note-grep $out/lib/note-grep
     makeWrapper $out/lib/note $out/bin/note --prefix PATH : ${pkgs.coreutils}
     makeWrapper $out/lib/note-dir $out/bin/note-dir --prefix PATH : ${pkgs.coreutils}
-    makeWrapper $out/lib/note-grep $out/bin/note-grep --prefix PATH : ${pkgs.coreutils}
+    makeWrapper $out/lib/note-grep $out/bin/note-grep --prefix PATH : ${pkgs.coreutils} --prefix PATH : ${pkgs.gnused}
   '';
 }
