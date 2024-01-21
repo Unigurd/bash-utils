@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-# if note-dir not empty:
 if [[ -n "$(ls -A "$(note-dir)")" ]]
 then
-  grep "$@" "$(note-dir)"/*
+  grep "$@" "$(note-dir)"/* | sed 's|.*/\(.*\):\(.*\)|\1:\2|'
 fi
-
-# Remove path from output
