@@ -1,3 +1,9 @@
 #!/usr/bin/env bash
 
-grep $@ "$(note-dir)"/*
+# if note-dir not empty:
+if [[ -z "$(ls -A)" ]]
+then
+  grep "$@" "$(note-dir)"/*
+fi
+
+# Remove path from output
