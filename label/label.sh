@@ -24,7 +24,14 @@ function label-dest() {
     return 1
   fi
 
-  cat "$(-label-dir)/$1"
+  local label="$1"
+  local label_path="$(-label-dir)/$label"
+  if [[ -f "$label_path" ]]
+  then
+    cat "$label_path"
+  else
+    echo "Label '$label' doesn't exist" 1>&2
+  fi
 }
 
 
