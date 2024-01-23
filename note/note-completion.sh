@@ -1,9 +1,9 @@
 function note-completion() {
   if [[ $COMP_CWORD -eq 1 ]]
   then
-    local latest="${COMP_WORDs[$COMP_CWORD]}"
+    local latest="${COMP_WORDS[$COMP_CWORD]}"
     local notes="$(note-list)"
-    local COMPREPLY=($(compgen -W "$notes" -- $latest))
+    COMPREPLY=($(compgen -W "$notes" -- $latest))
   fi
   return 0
 }
