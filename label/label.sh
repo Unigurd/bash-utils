@@ -6,6 +6,7 @@ function -label-dir() {
 	echo "$dir"
 }
 
+
 function label() {
   if [[ -z $1 ]] || [[ -n $2 ]]
 	then
@@ -15,6 +16,7 @@ function label() {
 
 	echo $(pwd) > "$(-label-dir)/$1"
 }
+
 
 
 function label-dest() {
@@ -37,7 +39,8 @@ function label-dest() {
 
 function label-list() {
   ls "$(-label-dir)"
-  }
+}
+
 
 function go() {
 	if [[ -z $1 ]] || [[ -n $2 ]]
