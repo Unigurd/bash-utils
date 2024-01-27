@@ -13,9 +13,7 @@ mkDerivation {
   buildInputs = [pkgs.makeWrapper];
   installPhase = ''
     mkdir -p "$out/bin"
-    mkdir -p "$out/lib"
-    cp $src "$out/lib/gurd-label.sh"
-    makeWrapper "$out/lib/gurd-label.sh" "$out/bin/gurd-label.sh" --prefix PATH : ${lib.makeBinPath [coreutils perl]}
+    cp $src "$out/bin/gurd-label.sh"
 
     mkdir -p "$out"/etc/bash_completion.d
     cp "$completion" "$out"/etc/bash_completion.d/
