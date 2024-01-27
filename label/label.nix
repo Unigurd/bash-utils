@@ -6,14 +6,16 @@ let
   coreutils = pkgs.coreutils;
 in
 mkDerivation {
-  name = "label";
-  src  = ./label.sh;
+  pname = "label";
+  version = "0.1";
+  src  = ./label.sh;  # pkgs.substitute {src = ./label.sh; replacements = {"perl" = perl;};};
   completion = ./label-completion.sh;
   dontUnpack = true;
-  buildInputs = [pkgs.makeWrapper];
   installPhase = ''
     mkdir -p "$out/bin"
-    cp $src "$out/bin/gurd-label.sh"
+    substitute "$src" "$out/bin/gurd-label.sh" --replace perl "${perl}/bin/perl" \
+               --replace ' ls ' ' ${coreutils}/bin/ls ' --replace cat ${coreutils}/bin/cat \
+               --replace echo ${coreutils}/bin/echo --replace mkdir ${coreutils}/bin/mkdir
 
     mkdir -p "$out"/etc/bash_completion.d
     cp "$completion" "$out"/etc/bash_completion.d/
