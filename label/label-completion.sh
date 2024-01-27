@@ -9,3 +9,5 @@ function label-completion() {
 }
 
 complete -F label-completion go
+complete -F label-completion label-dest
+complete -F label-completion lls
