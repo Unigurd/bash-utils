@@ -26,11 +26,12 @@ function label-dest() {
     return 1
   fi
 
-  local label="$1"
+  local label="$(echo "$1" | perl -ne 'm|(^[^/]*)|; print $1')"
+  local rest="$(echo "$1" | perl -ne 'm|/(.*)|; print $1')"
   local label_path="$(-label-dir)/$label"
   if [[ -f "$label_path" ]]
   then
-    cat "$label_path"
+    echo "$(cat "$label_path")/$rest"
   else
     echo "Label '$label' doesn't exist" 1>&2
   fi
