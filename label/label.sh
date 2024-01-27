@@ -52,3 +52,13 @@ function go() {
 
 	cd "$(label-dest $1)"
 }
+
+# lals = label ls
+function lals() {
+	if [[ -z $1 ]] || [[ -n $2 ]]
+	then
+	  echo Exactly 1 argument required
+	  return 1
+	fi
+  ls -A "$(label-dest $1)"
+}
