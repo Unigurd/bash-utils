@@ -34,6 +34,7 @@ function label-dest() {
     echo "$(cat "$label_path")/$rest"
   else
     echo "Label '$label' doesn't exist" 1>&2
+    return 1
   fi
 }
 
