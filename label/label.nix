@@ -8,7 +8,7 @@ in
 mkDerivation {
   pname = "label";
   version = "0.1";
-  src  = ./label.sh;  # pkgs.substitute {src = ./label.sh; replacements = {"perl" = perl;};};
+  src  = ./label.sh;
   completion = ./label-completion.sh;
   dontUnpack = true;
   installPhase = ''
