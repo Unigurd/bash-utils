@@ -16,8 +16,17 @@ label-completion() {
   elif [[ 1 -eq "$#" ]]
   then
     arg=$1
+  elif [[ 2 -eq "$#" ]]
+  then
+    if [[ -n "$1" ]]
+    then
+      arg=$2
+      actual_completion=true
+    else
+      return 0
+    fi
   else
-    echo At most one argument! 1>&2
+    echo At most two arguments! 1>&2
     return 2
   fi
 
