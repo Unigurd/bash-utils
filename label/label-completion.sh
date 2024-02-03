@@ -1,34 +1,47 @@
 label-completion() {
   local nullglob=$(shopt -p nullglob)
   shopt -s nullglob
-
+  echo COMP_CWORD: "$COMP_CWORD"
+  echo COMP_WORDS: "${COMP_WORDS[@]}"
   local arg
   local actual_completion=""
-  if [[ 0 -eq "$#" ]]
+  # if [[ 1 -eq "$#" ]]
+  # then
+  #   arg=$1
+
+  if [[ 1 -eq "$COMP_CWORD" ]]
   then
-    if [[ 1 -eq "$COMP_CWORD" ]]
-    then
-      arg=${COMP_WORDS[$COMP_CWORD]}
-      actual_completion=true
-    else # Only complete if there is exactly one argument
-      return 0
-    fi
-  elif [[ 1 -eq "$#" ]]
-  then
-    arg=$1
-  elif [[ 2 -eq "$#" ]]
-  then
-    if [[ -n "$1" ]]
-    then
-      arg=$2
-      actual_completion=true
-    else
-      return 0
-    fi
-  else
-    echo At most two arguments! 1>&2
-    return 2
+    arg=${COMP_WORDS[$COMP_CWORD]}
+    actual_completion=true
+  else # Only complete if there is exactly one argument
+    return 0
   fi
+  # elif [[ 1 -eq "$#" ]]
+  # if [[ 0 -eq "$#" ]]
+  # then
+  #   if [[ 1 -eq "$COMP_CWORD" ]]
+  #   then
+  #     arg=${COMP_WORDS[$COMP_CWORD]}
+  #     actual_completion=true
+  #   else # Only complete if there is exactly one argument
+  #     return 0
+  #   fi
+  # elif [[ 1 -eq "$#" ]]
+  # then
+  #   arg=$1
+  # elif [[ 2 -eq "$#" ]]
+  # then
+  #   if [[ -n "$1" ]]
+  #   then
+  #     arg=$2
+  #     actual_completion=true
+  #   else
+  #     return 0
+  #   fi
+  # else
+  #   echo At most two arguments! 1>&2
+  #   return 2
+  # fi
 
   # local arg=${COMP_WORDS[$COMP_CWORD]}
   local COMPREPLY=""

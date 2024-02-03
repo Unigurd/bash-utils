@@ -8,13 +8,19 @@ function -label-dir() {
 
 
 function label() {
-  if [[ -z $1 ]] || [[ -n $2 ]]
+  if [[ "$#" -ne 1 ]]
 	then
 	  echo Exactly 1 argument required
 	  return 1
 	fi
 
-	echo $(pwd) > "$(-label-dir)/$1"
+  local regex='^[a-zA-Z0-9_-]+$'
+  if [[ "$1" =~ $regex ]]
+  then echo $(pwd) > "$(-label-dir)/$1"
+  else
+    echo "label: Label must match regex '$regex'" 1>&2
+    return 1
+  fi
 }
 
 
