@@ -1,98 +1,94 @@
 label-completion() {
+  if [[ 1 -eq "$COMP_CWORD" ]]
+  then # Ensure there is only one argument to the command
+    label-completion_ files "${COMP_WORDS[$COMP_CWORD]}"
+  fi
+}
+
+go-completion() {
+  if [[ 1 -eq "$COMP_CWORD" ]]
+  then # Ensure there is only one argument to the command
+    label-completion_ '' "${COMP_WORDS[$COMP_CWORD]}"
+  fi
+}
+
+label-completion_() {
+  # Enable nullglob
   local nullglob=$(shopt -p nullglob)
   shopt -s nullglob
-  echo COMP_CWORD: "$COMP_CWORD"
-  echo COMP_WORDS: "${COMP_WORDS[@]}"
-  local arg
-  local actual_completion=""
-  # if [[ 1 -eq "$#" ]]
-  # then
-  #   arg=$1
 
-  if [[ 1 -eq "$COMP_CWORD" ]]
-  then
-    arg=${COMP_WORDS[$COMP_CWORD]}
-    actual_completion=true
-  else # Only complete if there is exactly one argument
-    return 0
-  fi
-  # elif [[ 1 -eq "$#" ]]
-  # if [[ 0 -eq "$#" ]]
-  # then
-  #   if [[ 1 -eq "$COMP_CWORD" ]]
-  #   then
-  #     arg=${COMP_WORDS[$COMP_CWORD]}
-  #     actual_completion=true
-  #   else # Only complete if there is exactly one argument
-  #     return 0
-  #   fi
-  # elif [[ 1 -eq "$#" ]]
-  # then
-  #   arg=$1
-  # elif [[ 2 -eq "$#" ]]
-  # then
-  #   if [[ -n "$1" ]]
-  #   then
-  #     arg=$2
-  #     actual_completion=true
-  #   else
-  #     return 0
-  #   fi
-  # else
-  #   echo At most two arguments! 1>&2
-  #   return 2
-  # fi
+  if [[ 2 -eq "$#" ]]
+  then # Ensure there is only one argument to the command
+    local option=$1
+    local arg=$2
+    local label=${arg%%/*}
 
-  # local arg=${COMP_WORDS[$COMP_CWORD]}
-  local COMPREPLY=""
-  local arg=$1
-  local label=${arg%%/*} # label will be empty if there is no slash in arg
-
-  if [[ -z "$label" ]]
-  then  # If there is no slash in arg, just suggest labels to autocomplete on
-    local labels=$(label-list)
-    COMPREPLY=($(compgen -W "$labels" -- $arg))
-
-  else # label-dest needs to return non-0 on failure
-    if label-dest "$label" >/dev/null 2>&1
-    then  # The label part is an actual label
-      local rest_path=${arg#*/}
-      local label_dest=$(label-dest "$label")
-      local path=${label_dest%/}/$rest_path
-
-      local normal_files=("$path"*)
-      case $rest_path in
-        */) local hidden_files=("$path".*);;
-        *)  local hidden_files=();;
-      esac
-
-      local _files1=("${normal_files[@]}" "${hidden_files[@]}")
-      # Add trailing / to folders
-      local _files2=()
-      for file in "${_files1[@]}"
-      do
-        if [[ -d "$file" ]]
-        then _files2+=("${file%/}/")
-        else _files2+=("$file")
-        fi
+    if [[ "$arg" != *"/"* ]]
+    then  # If there is no slash in arg just suggest labels to autocomplete on
+      local labels0=()
+      for other_label in $(label-list)
+      do [[ "$other_label" == "$arg"* ]] && labels0+=("$other_label")
       done
 
-      # Remove the label_path part of each file's path
-      local files=("${_files2[@]#$label_dest}")
-      # And add the label to the front
-      local matches=${files[@]/#/$label/}
+      if label-dest "$label" >/dev/null 2>&1
+      then # arg is a complete label
 
-      if [[ -n "$actual_completion" ]]
-      then
-        COMPREPLY=($(compgen -W "${matches[*]}" -- "$arg"))
-      else
-        echo "${matches[@]}"
+        # Add a trailing slash to arg to indicate you can complete further,
+        # but don't add a slash to the other completion suggestions
+        local labels1=()
+        for other_label in "${labels0[@]}"
+        do
+          if [[ "$label" == "$other_label" ]]
+          then labels1+=("$label/")
+          else labels1+=("$other_label")
+          fi
+        done
+
+        COMPREPLY=("${labels2[@]}")
+
+      else # arg is not a complete label so we just suggest labels straight
+        COMPREPLY=("${labels0[@]}")
+      fi
+
+    else # There is a slash in arg so we look for paths to complete on
+      # label-dest needs to return non-0 on failure
+      if label-dest "$label" >/dev/null 2>&1
+      then  # The label part is an actual label
+        local rest_path=${arg#*/}
+        local label_dest=$(label-dest "$label")
+        local path=${label_dest%/}/$rest_path
+
+        local normal_files=("$path"*)
+        case $rest_path in
+          */) local hidden_files=("$path".*);;
+          *)  local hidden_files=();;
+        esac
+
+        local _files1=("${normal_files[@]}" "${hidden_files[@]}")
+        # Add trailing / to folders
+        local _files2=()
+        for file in "${_files1[@]}"
+        do
+          if [[ -d "$file" ]]
+          then _files2+=("${file%/}/")
+          else [[ "$option" == files ]] &&_files2+=("$file")
+          fi
+        done
+
+        # Remove the label_path part of each file's path
+        local files=("${_files2[@]#$label_dest}")
+        # And add the label to the front
+        local matches=("${files[@]/#/$label/}")
+
+        COMPREPLY=("${matches[@]}")
       fi
     fi
   fi
+
+  # Disable nullglob
   $nullglob
 }
 
-complete -F label-completion go
-complete -F label-completion label-dest
-complete -F label-completion lals
+complete -o nospace -F go-completion go
+complete -o nospace -F label-completion label-dest
+complete -o nospace -F label-completion lals
