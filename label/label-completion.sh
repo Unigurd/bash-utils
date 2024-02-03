@@ -32,7 +32,6 @@ label-completion_() {
 
       if label-dest "$label" >/dev/null 2>&1
       then # arg is a complete label
-
         # Add a trailing slash to arg to indicate you can complete further,
         # but don't add a slash to the other completion suggestions
         local labels1=()
@@ -44,11 +43,11 @@ label-completion_() {
           fi
         done
 
-        COMPREPLY=("${labels2[@]}")
 
       else # arg is not a complete label so we just suggest labels straight
-        COMPREPLY=("${labels0[@]}")
+        labels1=("${labels0[@]}")
       fi
+      COMPREPLY=("${labels1[@]}")
 
     else # There is a slash in arg so we look for paths to complete on
       # label-dest needs to return non-0 on failure
